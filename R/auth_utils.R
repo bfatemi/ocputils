@@ -23,7 +23,7 @@ NULL
 ocpu_cipher <- function(msg){
   pub   <- sodium::hex2bin(ocpu_pubx)
   bin   <- protolite::serialize_pb(msg)
-  ciph  <- sodium::simple_encrypt(msg, pub)
+  ciph  <- sodium::simple_encrypt(bin, pub)
   ciphx <- sodium::bin2hex(ciph)
   return(ciphx)
 }
