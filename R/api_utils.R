@@ -1,0 +1,123 @@
+#' OCPU API Utils
+#'
+#' @param pkg TBD
+#' @param fun TBD
+#' @param verb TBD
+#' @param host TBD
+#' @param ... TBD
+#' @param apikey TBD
+#' @param url TBD
+#' @param args TBD
+#' @param config TBD
+#'
+#' @importFrom httr content stop_for_status GET POST status_code
+#' @importFrom pryr named_dots
+#' @importFrom stringr str_split str_remove
+#' @importFrom protolite unserialize_pb
+#' @importFrom sodium hash hex2bin data_decrypt
+#'
+#' @name api_utils
+NULL
+
+
+#' @describeIn api_utils TBD
+#' @export
+ocpu_api <- function(pkg, fun, verb, host, ...){
+  verb <- match.fun(match.arg(verb, choices = c("GET", "POST")))
+  url  <- paste0("https://", host, "/ocpu/library/", pkg, "/R/", fun)
+  body <- sapply(pryr::named_dots(...), eval, USE.NAMES = TRUE, simplify = FALSE)
+
+  args <- list(url = url, body = body, encode = "json")
+  resp <- do.call(verb, args = args)
+
+  httr::stop_for_status(resp)
+  parsed <- httr::content(resp, "text", encoding = "UTF-8")
+  txt <- stringr::str_split(parsed, pattern = "\\n")[[1]]
+
+  result <- txt[-which(sapply(txt, function(i) i == ""))]
+  return(result)
+}
+
+
+#' @describeIn api_utils TBD
+#' @export
+ocpu_body <- function(...){
+  wrap <- function(i) paste0("'", eval(i), "'")
+  args <- sapply(pryr::named_dots(...), wrap, USE.NAMES = TRUE, simplify = FALSE)
+  return(args)
+}
+
+#' @describeIn api_utils TBD
+#' @export
+ocpu_icecube_url <- function(fun){
+  srv <- "https://icecube.hpds.network"
+  lib <- "/ocpu/user/bobbyf/library/icecube"
+  url <- paste0(srv, lib, "/R/", fun)
+  return(url)
+}
+
+#' @describeIn api_utils TBD
+#' @export
+ocpu_radix_url <- function(apikey, fun){
+  tryCatch({
+    ciph_lib <- sodium::hex2bin(ciph_lib_hex)
+    ciph_srv <- sodium::hex2bin(ciph_srv_hex)
+    nonce_srv <- sodium::hex2bin(nonce_srv_hex)
+    nonce_lib <- sodium::hex2bin(nonce_lib_hex)
+
+    hash <- sodium::hash(sodium::hex2bin(apikey))
+
+    f <- function(ciph, non) sodium::data_decrypt(ciph, hash, non)
+    srv <- protolite::unserialize_pb(f(ciph_srv, hash, nonce_srv))
+    lib <- protolite::unserialize_pb(f(ciph_lib, hash, nonce_lib))
+
+    paste0(srv, lib, fun)
+
+  }, error = function(c){
+    stop("API ERROR (400): Incorrect API Key", call. = FALSE)
+  })
+}
+
+#' @describeIn api_utils TBD
+#' @export
+ocpu_parsed_post <- function(url, args = NULL, config = NULL){
+  resp <- httr::POST(url, config, body = args)
+  status_code <- httr::status_code(resp)
+
+  url_session  <- resp$headers$location
+  url_console  <- paste0(url_session, "console")
+  url_function <- resp$url
+
+  r_endpoints  <- httr::content(httr::GET(url_session), "text", encoding = "UTF-8")
+  console_txt  <- httr::content(httr::GET(url_console), "text", encoding = "UTF-8")
+  function_txt <- httr::content(httr::GET(url_function), "text", encoding = "UTF-8")
+
+  resp_content <- stringr::str_remove(httr::content(resp, "text", encoding = "UTF-8"), "\\n$")
+
+  if(status_code == 201){
+    output_value <- httr::content(httr::GET(paste0(url_session, "R/.val")), "text", encoding = "UTF-8")
+  }else{
+    output_value <- NULL
+  }
+
+  parsed <- list(
+    "status_code"   = resp$status_code,
+    "session_id"    = resp$headers$`x-ocpu-session`,
+    "url_session"   = url_session,
+    "content_text"  = resp_content,
+    "r_endpoints"   = r_endpoints,
+    "console_txt"   = console_txt,
+    "request_url"   = resp$url,
+    "output_value"  = output_value,
+    "r_function"    = function_txt,
+    "date"          = resp$headers$date,
+    "server"        = resp$headers$server,
+    "r_version"     = resp$headers$`x-ocpu-r`,
+    "ocpu_version"  = resp$headers$`x-ocpu-version`,
+    "ocpu_time"     = resp$headers$`x-ocpu-time`,
+    "content_cache" = resp$headers$`cache-control`,
+    "content_encod" = resp$headers$`content-encoding`,
+    "content_type"  = resp$headers$`content-type`
+  )
+  return(parsed)
+}

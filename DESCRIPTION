@@ -1,0 +1,22 @@
+Package: ocputils
+Title: What the Package Does (One Line, Title Case)
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Bobby",
+           family = "Fatemi",
+           role = c("aut", "cre"),
+           email = "bfatemi07@gmail.com",
+           comment = c(ORCID = "YOUR-ORCID-ID"))
+Description: What the package does (one paragraph).
+License: file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    sodium,
+    jsonlite,
+    protolite,
+    stringr,
+    pryr,
+    httr
+Depends: R (>= 2.10)
+RoxygenNote: 6.1.1
