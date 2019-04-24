@@ -59,23 +59,19 @@ ocpu_icecube_url <- function(fun){
 #' @describeIn api_utils TBD
 #' @export
 ocpu_radix_url <- function(apikey, fun){
-  tryCatch({
-    ciph_lib <- sodium::hex2bin(ciph_lib_hex)
-    ciph_srv <- sodium::hex2bin(ciph_srv_hex)
-    nonce_srv <- sodium::hex2bin(nonce_srv_hex)
-    nonce_lib <- sodium::hex2bin(nonce_lib_hex)
-
-    hash <- sodium::hash(sodium::hex2bin(apikey))
-
-    f <- function(ciph, non) sodium::data_decrypt(ciph, hash, non)
-    srv <- protolite::unserialize_pb(f(ciph_srv, hash, nonce_srv))
-    lib <- protolite::unserialize_pb(f(ciph_lib, hash, nonce_lib))
-
-    paste0(srv, lib, fun)
-
-  }, error = function(c){
-    stop("API ERROR (400): Incorrect API Key", call. = FALSE)
-  })
+  ciph_lib  <- sodium::hex2bin(ciph_lib_hex)
+  ciph_srv  <- sodium::hex2bin(ciph_srv_hex)
+  nonce_srv <- sodium::hex2bin(nonce_srv_hex)
+  nonce_lib <- sodium::hex2bin(nonce_lib_hex)
+  
+  keyhash <- sodium::hash( sodium::hex2bin(apikey) )
+  
+  srv <- sodium::data_decrypt(ciph_srv, keyhash, nonce_srv)
+  lib <- sodium::data_decrypt(ciph_lib, keyhash, nonce_lib)
+  
+  srvx <- protolite::unserialize_pb(srv)
+  libx <- protolite::unserialize_pb(lib)
+  return(paste0(srvx, libx, fun))
 }
 
 #' @describeIn api_utils TBD
