@@ -8,9 +8,11 @@
 #' @param noncex TBD
 #' @param privx TBD
 #' @param hash TBD
+#' @param pubx TBD
+#' @param ll TBD
 #'
-#' @importFrom sodium simple_encrypt auth_decrypt simple_decrypt data_decrypt password_verify hex2bin bin2hex hash
-#' @importFrom jsonlite fromJSON
+#' @importFrom sodium simple_encrypt auth_decrypt simple_decrypt data_decrypt password_verify hex2bin bin2hex hash 
+#' @importFrom jsonlite fromJSON toJSON
 #' @importFrom protolite unserialize_pb serialize_pb
 #'
 #' @name auth_utils
@@ -39,7 +41,6 @@ ocpu_decipher <- function(ciphx, privx){
   })
 }
 
-
 #' @describeIn auth_utils TBD
 #' @export
 ocpu_unserialize <- function(ocpu_json, local=FALSE){
@@ -50,6 +51,24 @@ ocpu_unserialize <- function(ocpu_json, local=FALSE){
   invisible(ll)
 }
 
+#' @describeIn auth_utils TBD
+#' @export
+ocpu_serialize <- function(ll, pubx=NULL){
+  f <- function(var, pub){
+    bin <- protolite::serialize_pb(var)
+    ocpu_ciph <- sodium::simple_encrypt(bin, pub)
+    ocpu_var  <- sodium::bin2hex(ocpu_ciph)
+    return(ocpu_var)
+  }
+  if(is.null(pubx)){
+    pub <- sodium::hex2bin(ocpu_pubx)
+  }else{
+    pub <- sodium::hex2bin(pubx)
+  }
+  cll <- lapply(ll, f, pub = pub)
+  json <- paste0("'", as.character(jsonlite::toJSON(cll)), "'")
+  return(json)
+}
 
 #' @describeIn auth_utils TBD
 #' @export

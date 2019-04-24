@@ -5,6 +5,7 @@
 \alias{ocpu_cipher}
 \alias{ocpu_decipher}
 \alias{ocpu_unserialize}
+\alias{ocpu_serialize}
 \alias{valid_client_apikey}
 \title{OCPU Auth Utils}
 \usage{
@@ -13,6 +14,8 @@ ocpu_cipher(msg)
 ocpu_decipher(ciphx, privx)
 
 ocpu_unserialize(ocpu_json, local = FALSE)
+
+ocpu_serialize(ll, pubx = NULL)
 
 valid_client_apikey(keyx, noncex, privx, hash)
 }
@@ -26,6 +29,10 @@ valid_client_apikey(keyx, noncex, privx, hash)
 \item{ocpu_json}{TBD}
 
 \item{local}{TBD}
+
+\item{ll}{TBD}
+
+\item{pubx}{TBD}
 
 \item{keyx}{TBD}
 
@@ -43,6 +50,8 @@ OCPU Auth Utils
 \item \code{ocpu_decipher}: simple decryption using server's priv key
 
 \item \code{ocpu_unserialize}: TBD
+
+\item \code{ocpu_serialize}: TBD
 
 \item \code{valid_client_apikey}: TBD
 }}
