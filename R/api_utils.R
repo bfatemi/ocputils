@@ -9,7 +9,9 @@
 #' @param url TBD
 #' @param args TBD
 #' @param config TBD
-#'
+#' 
+#' @importFrom pryr dots
+#' @importFrom rlang invoke
 #' @importFrom httr content stop_for_status GET POST status_code
 #' @importFrom pryr named_dots
 #' @importFrom stringr str_split str_remove
@@ -72,6 +74,15 @@ ocpu_radix_url <- function(apikey, fun){
   srvx <- protolite::unserialize_pb(srv)
   libx <- protolite::unserialize_pb(lib)
   return(paste0(srvx, libx, fun))
+}
+
+#' @describeIn api_utils TBD
+#' @export
+wrap_args <- function(...){
+  nams <- names(pryr::dots(...))
+  ll <- as.list(rlang::invoke(paste0, "'", c(...), "'"))
+  names(ll) <- nams
+  return(ll)
 }
 
 #' @describeIn api_utils TBD
