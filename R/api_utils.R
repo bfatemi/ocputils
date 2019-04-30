@@ -9,18 +9,17 @@
 #' @param url TBD
 #' @param args TBD
 #' @param config TBD
+#' @param r TBD
 #' 
-#' @importFrom pryr dots
+#' @importFrom pryr dots make_call named_dots
 #' @importFrom rlang invoke
 #' @importFrom httr content stop_for_status GET POST status_code
-#' @importFrom pryr named_dots
-#' @importFrom stringr str_split str_remove
+#' @importFrom stringr str_split str_remove str_extract
 #' @importFrom protolite unserialize_pb
 #' @importFrom sodium hash hex2bin data_decrypt
 #'
 #' @name api_utils
 NULL
-
 
 #' @describeIn api_utils TBD
 #' @export
@@ -128,3 +127,53 @@ ocpu_parsed_post <- function(url, args = NULL, config = NULL){
   )
   return(parsed)
 }
+
+#' @describeIn api_utils TBD
+#' @export
+ocpu <- function(...){
+  url <- "https://cortex.db.report/ocpu/user/intusurg/library/api/R/parse_entry"
+  
+  wrap_args <- function(...){
+    nams <- names(pryr::dots(...))
+    ll <- as.list(rlang::invoke(paste0, "'", c(...), "'"))
+    names(ll) <- nams
+    return(ll)
+  }
+  pryr::make_call("POST", url=url, body = list(wrap_args(...)))
+}
+
+#' @describeIn api_utils TBD
+#' @export
+call_ocpu <- function(...) do.call(ocpu, ...)
+
+
+#' @describeIn api_utils TBD
+#' @export
+do_ocpu <- function(r){
+  resp <- eval(r)
+  list(
+    "status"= resp$status_code,
+    "id" = resp$headers$`x-ocpu-session`,
+    "session" = list(
+      "api"        = stringr::str_extract("https://cortex.db.report/ocpu/tmp/", ".+(?=\\/ocpu)"),
+      "rvalue"     = paste0(resp$headers$location, "R/.val/json"),
+      "console"    = paste0(resp$headers$location, "console/text"),
+      "source"     = paste0(resp$headers$location, "source/text"),
+      "stdout"     = paste0(resp$headers$location, "stdout/text"),
+      "files"      = paste0(resp$headers$location, "files/"),
+      "session"    = resp$headers$location
+    ),
+    "meta" = list(
+      "request"       = resp$url,
+      "date"          = resp$headers$date,
+      "server"        = resp$headers$server,
+      "r_version"     = resp$headers$`x-ocpu-r`,
+      "ocpu_version"  = resp$headers$`x-ocpu-version`,
+      "ocpu_time"     = resp$headers$`x-ocpu-time`,
+      "content_cache" = resp$headers$`cache-control`,
+      "content_encod" = resp$headers$`content-encoding`,
+      "content_type"  = resp$headers$`content-type`
+    )
+  )
+}
+

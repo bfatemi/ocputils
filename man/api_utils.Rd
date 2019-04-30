@@ -8,6 +8,9 @@
 \alias{ocpu_radix_url}
 \alias{wrap_args}
 \alias{ocpu_parsed_post}
+\alias{ocpu}
+\alias{call_ocpu}
+\alias{do_ocpu}
 \title{OCPU API Utils}
 \usage{
 ocpu_api(pkg, fun, verb, host, ...)
@@ -21,6 +24,12 @@ ocpu_radix_url(apikey, fun)
 wrap_args(...)
 
 ocpu_parsed_post(url, args = NULL, config = NULL)
+
+ocpu(...)
+
+call_ocpu(...)
+
+do_ocpu(r)
 }
 \arguments{
 \item{pkg}{TBD}
@@ -40,6 +49,8 @@ ocpu_parsed_post(url, args = NULL, config = NULL)
 \item{args}{TBD}
 
 \item{config}{TBD}
+
+\item{r}{TBD}
 }
 \description{
 OCPU API Utils
@@ -57,5 +68,11 @@ OCPU API Utils
 \item \code{wrap_args}: TBD
 
 \item \code{ocpu_parsed_post}: TBD
+
+\item \code{ocpu}: TBD
+
+\item \code{call_ocpu}: TBD
+
+\item \code{do_ocpu}: TBD
 }}
 
