@@ -19,7 +19,7 @@ ocpu_body(...)
 
 ocpu_icecube_url(fun)
 
-ocpu_radix_url(apikey, fun)
+ocpu_radix_url(apikey, fun = NULL)
 
 wrap_args(...)
 
