@@ -48,7 +48,7 @@ encode_call <- function(fun, args){
 
 #' @describeIn ocpu_calls TBD
 #' @export
-decode_call <- function(encoded){
+decode_call <- function(fun, args){
   
   buildfun <- function(a, b){
     env <- rlang::global_env()
@@ -58,8 +58,8 @@ decode_call <- function(encoded){
       env = env
     )
   }
-  fbin <- sodium::hex2bin(eval(parse(text = encoded$fun)))
-  abin <- sodium::hex2bin(eval(parse(text = encoded$args)))
+  fbin <- sodium::hex2bin(fun)
+  abin <- sodium::hex2bin(args)
   
   f <- do.call(buildfun, jsonlite::fromJSON(protolite::unserialize_pb(fbin)))
   args <- jsonlite::fromJSON(protolite::unserialize_pb(abin))
@@ -70,16 +70,16 @@ decode_call <- function(encoded){
 #' @describeIn ocpu_calls TBD
 #' @export
 do_encoded <- function(fun, args){
-  cl <- decode_call(list(fun, args))
-  return(eval(cl))
+  ocl <- decode_call(list(fun, args))
+  return(eval(ocl))
 }
 
 # foc <- function(f, ...){
-#   url <-
 #   encode_call(f, ...)
 # }
 # 
-# foc(function(a) return(a + 2), a=1)
+# 
+# encode_call(function(a) return(a + 2), list(a=1))
 
 
 

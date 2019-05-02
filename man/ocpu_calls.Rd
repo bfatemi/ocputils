@@ -9,7 +9,7 @@
 \usage{
 encode_call(fun, args)
 
-decode_call(encoded)
+decode_call(fun, args)
 
 do_encoded(fun, args)
 }
