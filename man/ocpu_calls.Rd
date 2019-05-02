@@ -5,6 +5,7 @@
 \alias{encode_call}
 \alias{decode_call}
 \alias{do_encoded}
+\alias{printstamp}
 \title{TBD}
 \usage{
 encode_call(fun, args)
@@ -12,11 +13,15 @@ encode_call(fun, args)
 decode_call(fun, args)
 
 do_encoded(fun, args)
+
+printstamp(msg = "")
 }
 \arguments{
 \item{fun}{TBD}
 
 \item{args}{TBD}
+
+\item{msg}{TBD}
 
 \item{encoded}{TBD}
 }
@@ -30,6 +35,8 @@ TBD
 \item \code{decode_call}: TBD
 
 \item \code{do_encoded}: TBD
+
+\item \code{printstamp}: TBD
 }}
 
 \examples{

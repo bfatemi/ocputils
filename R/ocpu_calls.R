@@ -3,12 +3,14 @@
 #' @param fun TBD
 #' @param args TBD
 #' @param encoded TBD
+#' @param msg TBD
 #' 
 #' @importFrom rlang expr_text fn_fmls fn_body parse_expr global_env new_function
 #' @importFrom sodium bin2hex hex2bin
 #' @importFrom protolite serialize_pb unserialize_pb
 #' @importFrom jsonlite fromJSON toJSON
 #' @importFrom pryr make_call
+#' @importFrom stringr str_split str_c str_length
 #' 
 #' @examples 
 #' fun_local <- function(...) return(NULL)
@@ -74,12 +76,60 @@ do_encoded <- function(fun, args){
   return(eval(ocl))
 }
 
+#' @describeIn ocpu_calls TBD
+#' @export
+printstamp <- function(msg=""){
+  sym <- "#"
+  msglines <- stringr::str_split(msg, "\\n")[[1]]
+  msgmain <- msglines[which.max(sapply(msglines, stringr::str_length, simplify = FALSE)[[1]])]
+  
+  # make message length an even number for centering purposes
+  if(stringr::str_length(msgmain) %% 2 == 1)
+    msgmain <- stringr::str_c(msgmain, " ")
+  
+  msg <- stringr::str_c(" ", msglines, " ")
+  scount <- stringr::str_length(msgmain)
+  cushion <- ceiling(scount*1.3) - scount
+  
+  cushion <- cushion + cushion %% 2
+  topcount  <- scount + cushion - 1 + 2
+  sidecount <- sum(length(msglines), 2)
+  
+  # hdft   <- stringr::str_c(rep(sym, topcount), collapse = "")
+  spaces <- stringr::str_c(rep(" ", topcount - 1), collapse = "")
+  sides.left   <- rep(paste0(sym, ">"), sidecount)
+  sides.right  <- rep(sym, sidecount)
+  
+  grid_col <- topcount + 1
+  grid_row <- sidecount + 2
+  
+  tmp <- stringr::str_c(stringr::str_c(sides.left, spaces), collapse = "\n")
+  txt <- stringr::str_split(stringr::str_split(tmp, "\n")[[1]], "")
+  
+  pad.l <- c(paste0(sym, "> "), rep("", cushion/2-1))
+  pad.r <- " "#c(rep(" ", cushion/2-1), sym)
+  txt[2:(1+length(msglines))] <- lapply(stringr::str_split(msglines, ""), function(i) c(pad.l, i, pad.r))
+  
+  cat("\n\n")
+  cat(paste0(sapply(txt, function(itxt) paste0(c(itxt, "\n"), collapse = "")), collapse = ""))
+  cat("\n")
+}
+
+
+# 
 # foc <- function(f, ...){
-#   encode_call(f, ...)
+#   r <- httr::POST(ocpu_icecube_url("do_encoded"), body = encode_call(f, ...))
+#   if(httr::status_code(r)!=201){
+#     return(httr::content(r, "text", encoding = "UTF-8"))
+#   }
+#   src <- httr::content(httr::GET(paste0(r$headers$location, "console")), "text", encoding = "UTF-8")
+#   cat(paste0("\n", src, "\n"))
+#   val <- jsonlite::fromJSON(httr::content(httr::GET(paste0(r$headers$location, "R/.val/json")), "text", encoding = "UTF-8"))
+#   return(val)
 # }
 # 
 # 
-# encode_call(function(a) return(a + 2), list(a=1))
+# foc(function(a) return(a + 2), list(a=1))
 
 
 
