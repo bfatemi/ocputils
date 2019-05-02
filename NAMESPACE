@@ -2,6 +2,7 @@
 
 export(call_ocpu)
 export(decode_call)
+export(do_encoded)
 export(do_ocpu)
 export(encode_call)
 export(ocpu)
