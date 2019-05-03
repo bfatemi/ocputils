@@ -75,27 +75,30 @@ decode_call <- function(fun, args){
 #   if(httr::status_code(r)!=201){
 #     return(httr::content(r, "text", encoding = "UTF-8"))
 #   }
-#   src <- httr::content(httr::GET(paste0(r$headers$location, "console")), "text", encoding = "UTF-8")
+#   src <- httr::GET(paste0(r$headers$location, "console/json"))
+#   return(src)
+#   cat(src)
 #   srclines <- stringr::str_split(src, "\\n")[[1]]
 #   ind <- which(stringr::str_detect(srclines, "^\\#\\>"))
-#   
+# 
 #   clean_src <- srclines[-(1:(ind[1]-1))]
 #   ind  <- which(stringr::str_detect(clean_src, "^\\#\\>"))
 #   ind2 <- c(-ind, -which(stringr::str_detect(clean_src, "^$")))
-#   
+# 
 #   bgMaroon <- crayon::make_style("maroon", bg=TRUE)
 #   yellow1 <- crayon::make_style("yellow1")
 #   ivory <- crayon::make_style("ivory")
 #   clean_src[ind] <- crayon::italic(crayon::cyan(clean_src[ind]))
 #   clean_src[ind2] <- crayon::bold(yellow1(clean_src[ind2]))
-#   
+# 
 #   cat(paste0(clean_src, collapse = "\n"))
 #   val <- jsonlite::fromJSON(httr::content(httr::GET(paste0(r$headers$location, "R/.val/json")), "text", encoding = "UTF-8"))
 #   return(val)
 # }
 # 
 # 
-# val <- foc(function(a) return(a + 2), list(a=1))
+# src <- foc(function(a) return(a + 2), list(a=1))
+# cat(httr::content(src, as = "parsed", encoding = "UTF-8")[-1][[1]])
 
 
 
