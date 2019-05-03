@@ -5,8 +5,9 @@
 #' @param slim TBD
 #' @param content TBD
 #' @param addtime TBD
+#' @param decoded TBD
 #' 
-#' @importFrom stringr str_split str_c str_length str_count str_trunc
+#' @importFrom stringr str_split str_c str_length str_count str_trunc str_detect
 #' @importFrom crayon bgWhite bold magenta bgMagenta white make_style combine_styles bgCyan
 #' 
 #' @name ocpu_print
@@ -116,3 +117,70 @@ printmsg <- function(msg, sym="+", slim = TRUE, content=NULL, addtime=TRUE){
     cat("\n")
   }
 }
+
+
+# f <- function(...){
+#   return(NULL)
+# }
+# 
+# args <- list(a = 1, 
+#              letter = letters, 
+#              dt = data.table(d1 = "first", d2 = "second"), 
+#              l = list(1:100))
+# 
+# 
+# decoded <- list(FUN=f, ARGS=args)
+# 
+# print_ocpu_call(decoded)
+
+
+
+#' @describeIn ocpu_print TBD
+#' @export
+print_ocpu_call <- function(decoded){
+  verbose <- function(FUN, ARGS){
+    f0 <- function(i, ll){
+      nam <- names(ll)[i]
+      cls <- class(ll[[nam]])[1]
+      len <- length(ll[[nam]])
+      
+      l0 <- paste0("name  : ", nam)
+      l1 <- paste0("pos   : {", i, "}")
+      l2 <- paste0("class : ", cls)
+      l3 <- paste0("length: ", len)
+      
+      if(is.list(ll[[nam]]) | is.data.frame(ll[[nam]])){
+        vec <- capture.output(str(ll[[nam]]))[-1]
+        l4 <- vec[!stringr::str_detect(vec, "attr")]
+      }else{
+        top <- paste0(stringr::str_trunc(head(ll[[nam]]), 10), collapse = " | ")
+        if(len > 6)
+          top <- paste0(top, " | ...")
+        l4 <- paste0("Head  : ", top)
+      }
+      c(l0, l1, l2, l3, l4)
+    }
+    
+    S <- function(SYM, SEP) paste0("\n", SYM, SEP)
+    W1 <- function(x, f, SYM, ...) paste0("\n", SYM, " ", f(x, ...))
+    W2 <- function(x, SEP, W1, ...) c(S(SYM, SEP), W1(x, ...))
+    
+    SEP <- "----------------------------"
+    
+    head_lab1 <- "CALL ARGUMENTS"
+    SYM  <- "|+|"
+    SYMH <- paste0(SYM, "@@@ ")
+    args <- c(S(SYMH, head_lab1), lapply(1:length(ARGS), W2, SEP, W1, f=f0, SYM=SYM, ll=ARGS))
+    
+    head_lab2 <- "FUNCTION BODY"
+    SYM <- '|=|'
+    SYMH <- paste0(SYM, "@@@ ")
+    fun_txt <- rlang::expr_deparse(FUN)
+    fun <- c(S(SYMH, head_lab2), W2(unlist(lapply(fun_txt, W1, I, SYM)), SEP, I))
+    
+    return(c(list(fun),  args))
+  }
+  cat(paste0(unlist(verbose(decoded$FUN, decoded$ARGS)), collapse = ""))
+}
+
+

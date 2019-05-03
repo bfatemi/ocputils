@@ -4,12 +4,15 @@
 \alias{ocpu_print}
 \alias{printstamp}
 \alias{printmsg}
+\alias{print_ocpu_call}
 \title{OCPU PRINT UTILITY FUNCTIONS}
 \usage{
 printstamp(msg = "")
 
 printmsg(msg, sym = "+", slim = TRUE, content = NULL,
   addtime = TRUE)
+
+print_ocpu_call(decoded)
 }
 \arguments{
 \item{msg}{TBD}
@@ -21,6 +24,8 @@ printmsg(msg, sym = "+", slim = TRUE, content = NULL,
 \item{content}{TBD}
 
 \item{addtime}{TBD}
+
+\item{decoded}{TBD}
 }
 \description{
 OCPU PRINT UTILITY FUNCTIONS
@@ -30,5 +35,7 @@ OCPU PRINT UTILITY FUNCTIONS
 \item \code{printstamp}: TBD
 
 \item \code{printmsg}: TBD
+
+\item \code{print_ocpu_call}: TBD
 }}
 
