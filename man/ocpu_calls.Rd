@@ -4,18 +4,19 @@
 \alias{ocpu_calls}
 \alias{encode_call}
 \alias{decode_call}
+\alias{print_ocpu_call}
 \title{TBD}
 \usage{
 encode_call(fun, args)
 
 decode_call(fun, args)
+
+print_ocpu_call(fun, args)
 }
 \arguments{
 \item{fun}{TBD}
 
 \item{args}{TBD}
-
-\item{encoded}{TBD}
 }
 \description{
 TBD
@@ -25,13 +26,15 @@ TBD
 \item \code{encode_call}: TBD
 
 \item \code{decode_call}: TBD
+
+\item \code{print_ocpu_call}: TBD
 }}
 
 \examples{
-fun_local <- function(...) return(NULL)
-arg_local <- list(a = "ARG1", b = letters)
+#fun_local <- function(...) return(NULL)
+#arg_local <- list(a = "ARG1", b = letters)
 
-encoded <- encode_call(fun_local, arg_local)
+#encoded <- encode_call(fun_local, arg_local)
 #
 #.
 #..
@@ -39,9 +42,9 @@ encoded <- encode_call(fun_local, arg_local)
 #..
 #.
 #
-decoded <- decode_call(encoded)
+#decoded <- decode_call(encoded)
 
-fun_remote <- rlang::call_fn(decoded)
-arg_remote <- rlang::call_args(decoded)
+#fun_remote <- rlang::call_fn(decoded)
+#arg_remote <- rlang::call_args(decoded)
 
 }
