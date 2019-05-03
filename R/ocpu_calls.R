@@ -2,19 +2,19 @@
 #'
 #' @param fun TBD
 #' @param args TBD
-#' @param encoded TBD
 #' 
 #' @importFrom rlang expr_text fn_fmls fn_body parse_expr global_env new_function
 #' @importFrom sodium bin2hex hex2bin
 #' @importFrom protolite serialize_pb unserialize_pb
 #' @importFrom jsonlite fromJSON toJSON
 #' @importFrom pryr make_call
+#' @importFrom utils capture.output str head
 #' 
 #' @examples 
-#' fun_local <- function(...) return(NULL)
-#' arg_local <- list(a = "ARG1", b = letters)
+#' #fun_local <- function(...) return(NULL)
+#' #arg_local <- list(a = "ARG1", b = letters)
 #' 
-#' encoded <- encode_call(fun_local, arg_local)
+#' #encoded <- encode_call(fun_local, arg_local)
 #' #
 #' #.
 #' #..
@@ -22,10 +22,10 @@
 #' #..
 #' #.
 #' #
-#' decoded <- decode_call(encoded)
+#' #decoded <- decode_call(encoded)
 #' 
-#' fun_remote <- rlang::call_fn(decoded)
-#' arg_remote <- rlang::call_args(decoded)
+#' #fun_remote <- rlang::call_fn(decoded)
+#' #arg_remote <- rlang::call_args(decoded)
 #'
 #' @name ocpu_calls
 NULL
@@ -67,7 +67,53 @@ decode_call <- function(fun, args){
   return(ocl)
 }
 
-
+#' @describeIn ocpu_calls TBD
+#' @export
+print_ocpu_call <- function(fun, args){
+  verbose <- function(FUN, ARGS){
+    f0 <- function(i, ll){
+      nam <- names(ll)[i]
+      cls <- class(ll[[nam]])[1]
+      len <- length(ll[[nam]])
+      
+      l0 <- paste0("name  : ", nam)
+      l1 <- paste0("pos   : {", i, "}")
+      l2 <- paste0("class : ", cls)
+      l3 <- paste0("length: ", len)
+      
+      if(is.list(ll[[nam]]) | is.data.frame(ll[[nam]])){
+        vec <- capture.output(str(ll[[nam]]))[-1]
+        l4 <- vec[!stringr::str_detect(vec, "attr")]
+      }else{
+        top <- paste0(stringr::str_trunc(head(ll[[nam]]), 10), collapse = " | ")
+        if(len > 6)
+          top <- paste0(top, " | ...")
+        l4 <- paste0("Head  : ", top)
+      }
+      c(l0, l1, l2, l3, l4)
+    }
+    
+    S <- function(SYM, SEP) paste0("\n", SYM, SEP)
+    W1 <- function(x, f, SYM, ...) paste0("\n", SYM, " ", f(x, ...))
+    W2 <- function(x, SEP, W1, ...) c(S(SYM, SEP), W1(x, ...))
+    
+    SEP <- "----------------------------"
+    
+    head_lab1 <- "CALL ARGUMENTS"
+    SYM  <- "|+|"
+    SYMH <- paste0(SYM, "@@@ ")
+    args <- c(S(SYMH, head_lab1), lapply(1:length(args), W2, SEP, W1, f=f0, SYM=SYM, ll=args))
+    
+    head_lab2 <- "FUNCTION BODY"
+    SYM <- '|=|'
+    SYMH <- paste0(SYM, "@@@ ")
+    fun_txt <- rlang::expr_deparse(fun)
+    fun <- c(S(SYMH, head_lab2), W2(unlist(lapply(fun_txt, W1, I, SYM)), SEP, I))
+    
+    return(c(list(fun),  args))
+  }
+  cat(paste0(unlist(verbose(fun, args)), collapse = ""))
+}
 
 
 # foc <- function(f, ...){

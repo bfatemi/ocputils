@@ -116,3 +116,24 @@ printmsg <- function(msg, sym="+", slim = TRUE, content=NULL, addtime=TRUE){
     cat("\n")
   }
 }
+
+
+# f <- function(...){
+#   return(NULL)
+# }
+# 
+# args <- list(a = 1, 
+#              letter = letters, 
+#              dt = data.table(d1 = "first", d2 = "second"), 
+#              l = list(1:100))
+# 
+# 
+# decoded <- list(FUN=f, ARGS=args)
+# 
+# print_ocpu_call(decoded)
+
+
+
+
+
+
