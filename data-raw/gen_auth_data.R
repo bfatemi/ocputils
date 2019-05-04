@@ -29,4 +29,19 @@ nonce_lib_hex <- sodium::bin2hex(nonce_lib)
 ocpu_pubx   <- "082eba3252b0dea4f85273a2cf0cca31077d57dca155a2c63ead3b3b0b9bf734"
 radix_pubx  <- "4db944c28272dea4145bc9164d20d270088ae662c8a0424942576fb765f63c5e"
 client_pubx <- "1459e377f0b9192f924b7636c11f2f803400da25fc856c5f17093e324b3acf0c"
-usethis::use_data(ocpu_pubx, radix_pubx, ciph_srv_hex, ciph_lib_hex, nonce_srv_hex, nonce_lib_hex, client_pubx, internal = TRUE, overwrite = TRUE)
+
+
+
+# save to package ---------------------------------------------------------
+
+
+
+usethis::use_data(ocpu_pubx, 
+                  radix_pubx, 
+                  ciph_srv_hex, 
+                  ciph_lib_hex, 
+                  nonce_srv_hex, 
+                  nonce_lib_hex, 
+                  client_pubx,
+                  internal = TRUE, 
+                  overwrite = TRUE)
