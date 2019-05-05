@@ -36,7 +36,8 @@ client_pubx <- "1459e377f0b9192f924b7636c11f2f803400da25fc856c5f17093e324b3acf0c
 
 
 
-usethis::use_data(ocpu_pubx, 
+usethis::use_data(oops_html,
+                  ocpu_pubx, 
                   radix_pubx, 
                   ciph_srv_hex, 
                   ciph_lib_hex, 

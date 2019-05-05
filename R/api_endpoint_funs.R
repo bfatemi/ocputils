@@ -83,7 +83,7 @@ publishPlot <- function(hxp, width, height, res){
     }
     return(shiny::plotPNG(f,width,height,res,filename="plot.png"))
   }, error=function(c){
-    writeLines(ocputils::oops_html, "oops.html")
+    writeLines(oops_html, "oops.html")
     return("oops.html")
   })
 }

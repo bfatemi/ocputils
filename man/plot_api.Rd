@@ -23,6 +23,8 @@ plotpost(p, h = 700, w = 700, res = 160, show = TRUE)
 \item{w}{TBD}
 
 \item{res}{TBD}
+
+\item{show}{TBD}
 }
 \description{
 Title

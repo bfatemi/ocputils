@@ -5,6 +5,7 @@
 #' @param h TBD
 #' @param w TBD
 #' @param res TBD
+#' @param show TBD
 #' 
 #' @import shiny
 #' @importFrom httr POST
