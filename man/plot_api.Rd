@@ -11,7 +11,7 @@ plot2hex(p)
 
 hex2plot(hxp)
 
-plotpost(p, h = 500, w = 500, res = 98)
+plotpost(p, h = 700, w = 700, res = 160, show = TRUE)
 }
 \arguments{
 \item{p}{TBD}

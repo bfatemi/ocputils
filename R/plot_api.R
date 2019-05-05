@@ -33,19 +33,23 @@ hex2plot <- function(hxp){
 
 #' @describeIn plot_api TBD
 #' @export
-plotpost <- function(p, h=500, w=500, res=98){
-  url <- ocputils::ocpu_icecube_url("publishPlot")
-  r <- httr::POST(url, body = list(hxp = plot2hex(p), #paste0("'", plot2hex(p), "'"), 
+plotpost <- function(p, h=700, w=700, res=160, show = TRUE){
+  # url <- ocputils::ocpu_icecube_url("publishPlot")
+  url <- "https://icecube.hpds.network/ocpu/library/ocputils/R/publishPlot"
+  r <- httr::POST(url, body = list(hxp = paste0("'", plot2hex(p), "'"), #plot2hex(p), 
                                    height = h, 
                                    width = w, 
                                    res = res))
   id <- r$headers$`x-ocpu-session`
   api_path <- paste0("/", id, "/files/plot.png")
-  return(api_path)
+  
+  if(show){
+    view_api(api_path)
+    return(api_path)
+  }else{
+    return(api_path)
+  }
 }
-
-
-
 
 
 # viewUI( publishUI("inst/login.html") )
