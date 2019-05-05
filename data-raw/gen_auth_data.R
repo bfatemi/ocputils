@@ -1,8 +1,8 @@
 library(sodium)
 library(protolite)
 
-apikey <- ""
-host <- ""
+apikey <- "018ec6a3d3927f773a0d1b0adf516fa36b300929"
+host <- "http://192.168.1.64"
 
 
 hash_apikey <- sodium::hash(sodium::hex2bin(apikey))
