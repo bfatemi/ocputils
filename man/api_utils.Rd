@@ -5,6 +5,7 @@
 \alias{ocpu_api}
 \alias{ocpu_body}
 \alias{ocpu_icecube_url}
+\alias{oops}
 \alias{ocpu_radix_url}
 \alias{wrap_args}
 \alias{ocpu_parsed_post}
@@ -18,6 +19,8 @@ ocpu_api(pkg, fun, verb, host, ...)
 ocpu_body(...)
 
 ocpu_icecube_url(fun)
+
+oops()
 
 ocpu_radix_url(apikey, fun = NULL)
 
@@ -62,6 +65,8 @@ OCPU API Utils
 \item \code{ocpu_body}: TBD
 
 \item \code{ocpu_icecube_url}: TBD
+
+\item \code{oops}: TBD
 
 \item \code{ocpu_radix_url}: TBD
 

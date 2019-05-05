@@ -59,6 +59,10 @@ ocpu_icecube_url <- function(fun){
 
 #' @describeIn api_utils TBD
 #' @export
+oops <- function() return(oops_html)
+
+#' @describeIn api_utils TBD
+#' @export
 ocpu_radix_url <- function(apikey, fun=NULL){
   tryCatch({
     ciph_lib  <- sodium::hex2bin(ciph_lib_hex)
