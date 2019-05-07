@@ -20,6 +20,8 @@ Imports:
     httr,
     rlang,
     crayon,
-    utils
+    utils,
+    htmltools,
+    shiny
 Depends: R (>= 2.10)
 RoxygenNote: 6.1.1
