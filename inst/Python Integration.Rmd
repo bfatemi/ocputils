@@ -12,6 +12,7 @@ knitr::knit_engines$set(python = reticulate::eng_python)
 ```
 
 ## Python Client for Cortex API
+
 ```{python, cache=TRUE}
 import requests
 
@@ -24,16 +25,16 @@ def api_url(path):
 
 def list_api_functions():
   return requests.get(api_url('')).content
-  
 
-def cortex_api(fun, args):
+
+def cx_api(fun, args):
   H = {'Content-Type':'application/json'} # header
   url = api_url(fun) # url for r function call
   r = requests.post(url, json = args, headers=H) # call fun passing json formatted args
   return(r)
 
 
-def cortex_post(fun, args):
+def cx_post(fun, args):
   H = {'Content-Type':'application/json'} # header
   url = api_url(fun) # url for r function call
   r = requests.post(url, json = args, headers=H) # call fun passing json formatted args
@@ -41,20 +42,20 @@ def cortex_post(fun, args):
   return(r.headers['X-ocpu-session'])
 
 
-def cortex_session(SID):
+def cx_session(SID):
   H = {'Content-Type':'application/json'} # header
   url = _url() + "/ocpu/tmp/" + SID
   r = requests.get(url, headers = H)
   return(r.content)
 
-def cortex_session_fun(SID, fun):
+def cx_session_fun(SID, fun):
   H = {'Content-Type':'application/json'} # header
   url = _url() + "/ocpu/tmp/" + SID + "/R/" + fun
   r = requests.get(url, headers = H)
   return(r.text)
   
 
-def cortex_session_value(SID):
+def cx_session_value(SID):
   H = {'Content-Type':'application/json'} # header
   url = _url() + "/ocpu/tmp/" + SID + "/R/.val/json"
   r = requests.get(url, headers = H)
@@ -67,31 +68,33 @@ def cortex_session_console(SID):
   r = requests.get(url, headers = H)
   return(r.json())
 
-def cortex_session_stdout(SID):
+def cx_session_stdout(SID):
   H = {'Content-Type':'application/json'} # header
   url = _url() + "/ocpu/tmp/" + SID + "/stdout/json"
   r = requests.get(url, headers = H)
   return(r.json())
 
 
-def cortex_session_info(SID):
+def cx_session_info(SID):
   H = {'Content-Type':'application/json'} # header
   url = _url() + "/ocpu/tmp/" + SID + "/info"
   r = requests.get(url, headers = H)
   return(r.content)
 
-def cortex_session_package(SID):
+
+def cx_session_package(SID):
   H = {'Content-Type':'application/json'} # header
   url = _url() + "/ocpu/tmp/" + SID + "/files/DESCRIPTION"
   r = requests.get(url, headers = H)
   return(r.content)
 
 
-def cortex_session_source(SID):
+def cx_session_source(SID):
   H = {'Content-Type':'application/json'} # header
   url = _url() + "/ocpu/tmp/" + SID + "/source/json"
   r = requests.get(url, headers = H)
   return(r.json())
+
 
 def R(fun, args):
   H = {'Content-Type':'application/json'}
@@ -101,71 +104,23 @@ def R(fun, args):
   r2 = requests.get(val_url)
   return(r2.json())
 
-#resp = cortex_api("rFunction1", {'opt': 'value'})
-#print(resp.content)
 
-rfun = "rFunction1"
-args = {'opt': 'value'}
+fun  = "CortexEndpoint"
+args = {'session_id': 'value'}
+SID  = cx_post(fun, args)
 
-SID = cortex_post(rfun, args)
+cx_session_value(SID)
 
-print(cortex_session(SID))
-print(cortex_session_value(SID))
-print(cortex_session_info(SID))
-print(cortex_session_package(SID))
-print(cortex_session_source(SID))
-print(cortex_session_stdout(SID))
-print(cortex_session_console(SID))
-print(cortex_session_fun(SID, rfun))
+print(cx_session(SID))
+print()
+print(cx_session_info(SID))
+print(cx_session_package(SID))
+print(cx_session_source(SID))
+print(cx_session_stdout(SID))
+print(cx_session_console(SID))
+print(cx_session_fun(SID, rfun))
 ```
 
-
-
-
-
-
-print(cortex_session_function(SID))
-
-
-
-session_objects = cortex_session(SID)
-print(session_objects)
-
-val = cortex_session_value(SID)
-
-cortex_session_stdout(SID)
-cortex_session_console(SID)
-cortex_session_info(SID)
-cortex_session_package(SID)
-print(val)
-
-output = R("rFunction1", {'opt': 'value'})
-print(output)
-
-
-
-
-
-  
-
-  
-session = 
-
-
-val_path = session
-print(val_path)
-
-value = cortex_get(val_path)
-print(value)
-
-```
 
 ## Cortex Analytics
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
