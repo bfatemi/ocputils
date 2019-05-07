@@ -4,27 +4,16 @@
 \alias{plot_api}
 \alias{plot2hex}
 \alias{hex2plot}
-\alias{plotpost}
 \title{Title}
 \usage{
 plot2hex(p)
 
 hex2plot(hxp)
-
-plotpost(p, h = 700, w = 700, res = 160, show = TRUE)
 }
 \arguments{
 \item{p}{TBD}
 
 \item{hxp}{TBD}
-
-\item{h}{TBD}
-
-\item{w}{TBD}
-
-\item{res}{TBD}
-
-\item{show}{TBD}
 }
 \description{
 Title
@@ -34,7 +23,5 @@ Title
 \item \code{plot2hex}: TBD
 
 \item \code{hex2plot}: TBD
-
-\item \code{plotpost}: TBD
 }}
 
