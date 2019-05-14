@@ -1,0 +1,17 @@
+default:
+  datawarehouse:
+    driver: 'Postgres' 
+    server: 'mydb-test.company.com'
+    uid: 'local-account'
+    pwd: 'my-password'  // not recommended, see alternatives below
+    port: 5432
+    database: 'regional-sales-sample'
+    
+rsconnect:
+  datawarehouse:
+    driver: 'PostgresPro'
+    server: 'mydb-prod.company.com'
+    uid: 'service-account'
+    pwd: 'service-password' // not recommended, see alternatives below
+    port: 5432
+    database: 'regional-sales-full'
