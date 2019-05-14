@@ -80,7 +80,22 @@ ocpu_radix_url <- function(apikey, fun=NULL){
   }, error = function(c){
     stop("Invalid api client key", call. = FALSE)
   })
-  
+}
+
+#' @describeIn api_utils TBD
+#' @export
+ocpu_url <- function(node, usr=NULL, fun=NULL, apikey = NULL){
+  if(is.null(usr)) usr <- node
+  if(node == "radix"){
+    if(Sys.getenv("HPDS_API") == "" & is.null(apikey))
+      stop("System var HPDS_API is not set and argument 'apikey' not given")
+    return( httr::parse_url(ocpu_radix_url(apikey, fun)) )
+  }
+  if(node == "icecube"){
+    return( httr::parse_url(ocpu_icecube_url(fun)) )
+  }
+  url <- paste0("https://", node, ".hpds.network/ocpu/user/", usr, "/library/api/R/", fun)
+  httr::parse_url(url)
 }
 
 #' @describeIn api_utils TBD
