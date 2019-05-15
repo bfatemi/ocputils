@@ -2,7 +2,7 @@ library(sodium)
 library(protolite)
 
 apikey <- "018ec6a3d3927f773a0d1b0adf516fa36b300929"
-host <- "http://192.168.1.64"
+host <- "http://23.124.72.213"
 
 
 hash_apikey <- sodium::hash(sodium::hex2bin(apikey))
@@ -36,7 +36,7 @@ client_pubx <- "1459e377f0b9192f924b7636c11f2f803400da25fc856c5f17093e324b3acf0c
 
 
 
-usethis::use_data(oops_html,
+usethis::use_data(
                   ocpu_pubx, 
                   radix_pubx, 
                   ciph_srv_hex, 
